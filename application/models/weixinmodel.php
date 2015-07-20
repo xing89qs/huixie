@@ -36,6 +36,7 @@ class WeixinModel extends CI_Model{
 	}
 	function sendMessage(){
 		$openid = 'oJWDev7W6DN_6gKuLumLPoOUeky4';
+		//shezhi
 	}
 	
 }
