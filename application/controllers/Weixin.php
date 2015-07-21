@@ -7,6 +7,7 @@ class Weixin extends CI_Controller {
 	}
 	//默认入口
 	function index(){
+		$this->log('开始');
 		// if($this->checkSignature() == false){
 		// 	exit(0);
 		// }
@@ -16,13 +17,17 @@ class Weixin extends CI_Controller {
 		// }
 		if(isset($GLOBALS['HTTP_RAW_POST_DATA'])){
 			$postData = $GLOBALS['HTTP_RAW_POST_DATA'];
+			$this->log('$postData=>'.$postData);
 		}else{
+			$this->log('$postData=> NULL');
 			exit(0);
 		}
 		$xmlObj = simplexml_load_string($postData, 'SimpleXMLElement',LIBXML_NOCDATA);
 		if(!$xmlObj){
 			echo 'wrong input';
+			$this->log('$xmlObj=> NULL');
 			exit(0);
+		}
 
 			$fromUserName = $xmlObj->FromUserName;
 			$toUserName = $xmlObj->ToUserName;
@@ -42,8 +47,9 @@ class Weixin extends CI_Controller {
 			<FuncFlag>0</FuncFlag>
 			</xml>";
 			$resultStr = sprintf($retTmp, $fromUserName, $toUserName, time(), $retMsg);
+			$this->log('$resultStr=>'.$resultStr);
+			$this->log('结束');
 			echo $resultStr;
-		}
 	}
 	//验证签名
 	function checkSignature(){
@@ -66,6 +72,26 @@ class Weixin extends CI_Controller {
 			return false;
 		}
 	}
+
+	function log($str){  
+        $mode='a';//追加方式写  
+        $file = "log.txt";  
+        $oldmask = @umask(0);  
+        $fp = @fopen($file,$mode); 
+        @flock($fp, 3);  
+        if(!$fp)  
+        {  
+            Return false;  
+        }  
+        else  
+        {  
+            @fwrite($fp,date('Y-m-d').' --> '.$str."\n");  
+            @fclose($fp);  
+            @umask($oldmask);  
+            Return true;  
+        }  
+    }  
+
 	function getAllFollower(){
 		$this->load->model('WeixinModel');
 		//echo $this->WeixinModel->getAccessToken();
