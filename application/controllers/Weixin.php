@@ -48,10 +48,10 @@ class Weixin extends CI_Controller {
 	//验证签名
 	function checkSignature(){
 		$signature = $_GET['signature'];
-		$timestamp = $_POST['timestamp'];
+		$timestamp = $_GET['timestamp'];
 		$nonce = $_GET['nonce'];
 
-		$token = TOKEN;
+		$token = 'fuxuejiaoyu';
 		$tmpArr = array($token, $timestamp, $nonce);
 		sort($tmpArr);
 		$tmpStr = implode($tmpArr);
