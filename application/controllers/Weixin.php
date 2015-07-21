@@ -55,7 +55,7 @@ class Weixin extends CI_Controller {
 		$tmpArr = array($token, $timestamp, $nonce);
 		sort($tmpArr);
 		$tmpStr = implode($tmpArr);
-		$tmpStr = shal($tmpStr);
+		$tmpStr = sha1($tmpStr);
 
 		if($tmpStr == $signature){
 			return true;
