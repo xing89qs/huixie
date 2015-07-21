@@ -7,46 +7,49 @@ class Weixin extends CI_Controller {
 	}
 	//默认入口
 	function index(){
-		if($this->checkSignature() == false){
-			exit(0);
-		}
-		if($_GET['echostr']){
-			echo $_GET['echostr'];
-			exit(0);
-		}
-
-		$postData = $GLOBALS['HTTP_RAW_POST_DATA'];
-		if(!$postData){
-			echo 'wrong input';
+		// if($this->checkSignature() == false){
+		// 	exit(0);
+		// }
+		// if(isset($_GET['echostr'])){
+		// 	echo $_GET['echostr'];
+		// 	exit(0);
+		// }
+		if(isset($GLOBALS['HTTP_RAW_POST_DATA'])){
+			$postData = $GLOBALS['HTTP_RAW_POST_DATA'];
+		}else{
 			exit(0);
 		}
 		$xmlObj = simplexml_load_string($postData, 'SimpleXMLElement',LIBXML_NOCDATA);
-		if(!xmlObj){
+		if(!$xmlObj){
 			echo 'wrong input';
 			exit(0);
+
+			$fromUserName = $xmlObj->FromUserName;
+			$toUserName = $xmlObj->ToUserName;
+			$msgType = $xmlObj->MsgType;
+			if('text' != $msgType){
+				$retMsg = '只关注文本消息';
+			}else{
+				$content = $xmlObj->Content;
+				$retMsg = $content;
+			}
+			$retTmp = "<xml>
+			<ToUserName><![CDATA[%s]]></ToUserName>
+			<FromUserName><![CDATA[%s]]></FromUserName>
+			<CreateTime>%s</CreateTime>
+			<MsgType><![CDATA[text]]></MsgType>
+			<Content><![CDATA[%s]]></Content>
+			<FuncFlag>0</FuncFlag>
+			</xml>";
+			$resultStr = sprintf($retTmp, $fromUserName, $toUserName, time(), $retMsg);
+			echo $resultStr;
 		}
-		$fromUserName = $xmlObj->FromUserName;
-		$toUserName = $xmlObj->toUserName;
-		$msgType = $xmlObj->MsgType;
-		if('text' != $msgType){
-			$retMsg = '只关注文本消息';
-		}else{
-			$content = $xmlObj->Content;
-			$retMsg = $content;
-		}
-		$retTmp = "<xml>
-		<ToUserName><![CDATA[%s]]></ToUserName>
-		<FromUserName><![CDATA[%s]]></FromUserName>
-		<CreateTime>%s</CreateTime>
-		<MsgType><![CDATA[text]]></MsgType>
-		<Content><![CDATA[%s]]></Content>
-		<FuncFlag>0</FuncFlag>
-		</xml>";
-		$resultStr = sprintf($retTmp, $fromUserName, $toUserName, time(), $retMsg);
-		echo $resultStr;
 	}
 	//验证签名
 	function checkSignature(){
+		if(!isset($_GET['signature'])){
+			return false;
+		}
 		$signature = $_GET['signature'];
 		$timestamp = $_GET['timestamp'];
 		$nonce = $_GET['nonce'];
