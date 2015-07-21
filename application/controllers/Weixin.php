@@ -1,6 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); //防止用户直接访问
 
-define('TOKEN', 'fuxuejiaoyu')
 class Weixin extends CI_Controller {
 	function __construct(){
 		parent::__construct();
@@ -8,7 +7,7 @@ class Weixin extends CI_Controller {
 	}
 	//默认入口
 	function index(){
-		if(checkSignature() == false){
+		if($this->checkSignature() == false){
 			exit(0);
 		}
 		if($_GET['echostr']){
@@ -44,7 +43,7 @@ class Weixin extends CI_Controller {
 		<FuncFlag>0</FuncFlag>
 		</xml>";
 		$resultStr = sprintf($retTmp, $fromUserName, $toUserName, time(), $retMsg);
-		echo $resultStr
+		echo $resultStr;
 	}
 	//验证签名
 	function checkSignature(){
