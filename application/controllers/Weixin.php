@@ -7,14 +7,93 @@ class Weixin extends CI_Controller {
 	}
 	//默认入口
 	function index(){
-		$this->log('开始');
-		// if($this->checkSignature() == false){
-		// 	exit(0);
-		// }
-		// if(isset($_GET['echostr'])){
-		// 	echo $_GET['echostr'];
-		// 	exit(0);
-		// }
+		$this->log('index start <-----------------------------------------------');
+		$this->load->model('CtokenModel');
+		
+		//url encode
+		$url = 'http://nomoredue.com/huixie/index.php/user/orderPage';
+		echo urlencode($url);
+		
+		$this->log('index end ==================================================>');
+	}
+
+	// 要连接数据库，检测更新
+	private function getAccessToken(){
+		$token = 'Ex2ZupGFEqr6RGucCCB8R2DjnJd4T9ZfT2sdvOrf_cgYZNYCfy7Dhyiglga8-kc8b4H4XlHvO5-o6dZb1Wk5YBnVzTfMC--oXtwa9516-bY';
+		return $token;
+	}
+
+//  https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd901e4412fc040b&redirect_uri=http%3A%2F%2Fnomoredue.com%2Fhuixie%2Findex.php%2Fuser%2ForderPage&response_type=code&scope=snsapi_base&state=fuxue#wechat_redirect
+
+	//添加自定义菜单函数
+	private function createMenu(){
+		//此处使用CURL发送Https请求
+		$token = $this->getAccessToken();
+		$this->load->model('HttpModel');
+		$menuData = array(
+			'button'=>array(
+				array(
+					'type' => 'view',
+					'name' => '我要下单',
+					'key' => 'B1_order'
+				),
+				array(
+					'name' => '订单列表',
+					'sub_button' => array(
+						array(
+							'type' => 'click',
+							'name' => '待付款',
+							'key' => 'B2_unpaid'
+						),
+						array(
+							'type' => 'click',
+							'name' => '待接单',
+							'key' => 'B2_unselected'
+						),
+						array(
+							'type' => 'click',
+							'name' => '已接单',
+							'key' => 'B2_unfinished'
+						),
+						array(
+							'type' => 'click',
+							'name' => '已完成',
+							'key' => 'B2_finished'
+						)
+				),
+				array(
+					'name' => '接单列表',
+					'sub_button' => array(
+						array(
+							'type' => 'click',
+							'name' => '待选择',
+							'key' => 'B3_unselected'
+						),
+						array(
+							'type' => 'click',
+							'name' => '进行中',
+							'key' => 'B3_unfinished'
+						),
+						array(
+							'type' => 'click',
+							'name' => '已完成',
+							'key' => 'B3_finished'
+						)
+					)
+				)
+			)
+		));
+		$url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token='.$token;
+		$ret = $this->HttpModel->doCurlPostRequest($url, json_encode($menuData, JSON_UNESCAPED_UNICODE));
+		$retData = json_decode($ret, true);
+
+		var_dump($retData);
+
+	}
+
+
+	//测试接收和回复用户消息的函数，原样返回消息
+	private function autoReply(){
 		if(isset($GLOBALS['HTTP_RAW_POST_DATA'])){
 			$postData = $GLOBALS['HTTP_RAW_POST_DATA'];
 			$this->log('$postData=>'.$postData);
@@ -28,17 +107,16 @@ class Weixin extends CI_Controller {
 			$this->log('$xmlObj=> NULL');
 			exit(0);
 		}
-
-			$fromUserName = $xmlObj->FromUserName;
-			$toUserName = $xmlObj->ToUserName;
-			$msgType = $xmlObj->MsgType;
-			if('text' != $msgType){
-				$retMsg = '只关注文本消息';
-			}else{
-				$content = $xmlObj->Content;
-				$retMsg = $content;
-			}
-			$retTmp = "<xml>
+		$fromUserName = $xmlObj->FromUserName;
+		$toUserName = $xmlObj->ToUserName;
+		$msgType = $xmlObj->MsgType;
+		if('text' != $msgType){
+			$retMsg = '只关注文本消息';
+		}else{
+			$content = $xmlObj->Content;
+			$retMsg = $content;
+		}
+		$retTmp = "<xml>
 			<ToUserName><![CDATA[%s]]></ToUserName>
 			<FromUserName><![CDATA[%s]]></FromUserName>
 			<CreateTime>%s</CreateTime>
@@ -46,15 +124,16 @@ class Weixin extends CI_Controller {
 			<Content><![CDATA[%s]]></Content>
 			<FuncFlag>0</FuncFlag>
 			</xml>";
-			$resultStr = sprintf($retTmp, $fromUserName, $toUserName, time(), $retMsg);
-			$this->log('$resultStr=>'.$resultStr);
-			$this->log('结束');
-			echo $resultStr;
+		$resultStr = sprintf($retTmp, $fromUserName, $toUserName, time(), $retMsg);
+		$this->log('$resultStr=>'.$resultStr);
+		echo $resultStr;
 	}
-	//验证签名
-	function checkSignature(){
+
+	//验证签名(只有这一个函数，一般只调用一次)
+	private function checkSignature(){
 		if(!isset($_GET['signature'])){
-			return false;
+			log_message('info','checkSignature error');
+			exit(0);
 		}
 		$signature = $_GET['signature'];
 		$timestamp = $_GET['timestamp'];
@@ -69,11 +148,12 @@ class Weixin extends CI_Controller {
 		if($tmpStr == $signature){
 			return true;
 		}else{
-			return false;
+			log_message('info','checkSignature error');
+			exit(0);
 		}
 	}
-
-	function log($str){  
+	//写内容到文件，log日志功能
+	private function log($str){  
         $mode='a';//追加方式写  
         $file = "log.txt";  
         $oldmask = @umask(0);  
@@ -85,22 +165,15 @@ class Weixin extends CI_Controller {
         }  
         else  
         {  
-            @fwrite($fp,date('Y-m-d').' --> '.$str."\n");  
+            @fwrite($fp,date('Y-m-d h:i:sa').' --> '.$str."\n");  
             @fclose($fp);  
             @umask($oldmask);  
             Return true;  
         }  
-    }  
-
-	function getAllFollower(){
-		$this->load->model('WeixinModel');
-		//echo $this->WeixinModel->getAccessToken();
-		echo $this->WeixinModel->getAllFollower();
-	}
-	
+    }
 
 	//获取IP
-	function getIp(){
+	private function getIp(){
 		if(isset($_SERVER)){
 			if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])){
 				$realip = $_SERVER['HTTP_X_FORWARDED_FOR'];

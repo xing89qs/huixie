@@ -55,5 +55,10 @@ create table `selectedTa`(
 `createTime` datetime NOT NULL
 )
 
-
-
+#access_token列表
+create table `ctoken`(
+`appId` varchar(255) NOT NULL,
+`token` varchar(255) DEFAULT NULL,
+`expire` int(11) DEFAULT NULL,
+`createTime` int(11) DEFAULT NULL
+)

@@ -4,6 +4,7 @@ class User extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->helper('url');
+		$this->load->model('HttpModel');
 	}
 	function userList()
 	{
@@ -61,10 +62,24 @@ class User extends CI_Controller {
 		}
 	}
 	function orderPage(){
-		$data['pageTitle'] = 'All Orders';
-		$this->load->view('userHeader',$data);
-		$this->load->view('addOrder');
-		$this->load->view('userFooter');
+		if(isset($_GET['code'])) {
+			$appid = 'wxcd901e4412fc040b';
+			$appsecret = '16a24c163a44ee41fa3ef630c1c455ec';
+			$code = $_GET['code'];
+			$data = $this->HttpModel->doCurlGetRequest('https://api.weixin.qq.com/sns/oauth2/access_token?appid='.$appid.'&secret='.appsecret.'&code='.$code.'&grant_type=authorization_code');
+		  	$data = json_decode($data);
+		  	$openid = $data->openid;
+		  	$access_token = $data->access_token;
+		  	echo 'openid: '.$openid.' ; access_token'.$access_token."\n";
+
+		  	$data['pageTitle'] = 'All Orders';
+			$this->load->view('userHeader',$data);
+			$this->load->view('addOrder');
+			$this->load->view('userFooter');
+		}else{
+			echo '请登陆';
+			exit(0);
+		}
 	}
 	function addOrder(){
 		$this->load->model('OrderModel');
