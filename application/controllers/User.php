@@ -4,13 +4,13 @@ class User extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->helper('url');
-		$this->load->model('HttpModel');
+		$this->load->model('Http_model');
 	}
 	function userList()
 	{
 		$data['pageTitle'] = '所有用户';
-		$this->load->model('UserModel');
-		$data['userList'] = $this->UserModel->getAll();
+		$this->load->model('User_model');
+		$data['userList'] = $this->User_model->getAll();
 		$this->load->view('adminHeader',$data);		
 		$this->load->view('userList');
 		$this->load->view('adminFooter');
@@ -22,7 +22,7 @@ class User extends CI_Controller {
 		$this->load->view('adminFooter');
 	}
 	function register(){
-		$this->load->model('UserModel');
+		$this->load->model('User_model');
 		$data['name']=$_POST['name'];
 		$data['university']=$_POST['university'];
 		$data['email'] = $_POST['email'];
@@ -34,7 +34,7 @@ class User extends CI_Controller {
 			header("refresh:$time;url=registerPage");
 			print('信息错误，添加失败...<br>'.$time.'秒后自动跳转。');
 		}
-		if (!$this->UserModel->add($data)) {
+		if (!$this->User_model->add($data)) {
 			$time = 3;
 			header("refresh:$time;url=registerPage");
 			print('信息错误，添加失败...<br>'.$time.'秒后自动跳转。');
@@ -48,9 +48,9 @@ class User extends CI_Controller {
 		$this->load->view('userFooter');
 	}
 	function login(){
-		$this->load->model('UserModel');
+		$this->load->model('User_model');
 		$name = $_POST['name'];
-		$user = $this->UserModel->searchByName($name);
+		$user = $this->User_model->searchByName($name);
 		if($user){
 			session_start();
 			$_SESSION['user'] = $user;	
@@ -66,10 +66,11 @@ class User extends CI_Controller {
 			$appid = 'wxcd901e4412fc040b';
 			$appsecret = '16a24c163a44ee41fa3ef630c1c455ec';
 			$code = $_GET['code'];
-			$data = $this->HttpModel->doCurlGetRequest('https://api.weixin.qq.com/sns/oauth2/access_token?appid='.$appid.'&secret='.appsecret.'&code='.$code.'&grant_type=authorization_code');
-		  	$data = json_decode($data);
-		  	$openid = $data->openid;
-		  	$access_token = $data->access_token;
+			$para = array('appid'=>$appid, 'secret'=>$appsecret, 'code'=>$code, 'grant_type'=>'authorization_code');
+			$ret = $this->Http_model->doCurlGetRequest('https://api.weixin.qq.com/sns/oauth2/access_token',$para);
+		  	$retData = json_decode($ret);
+		  	$openid = $retData->openid;
+		  	$access_token = $retData->access_token;
 		  	echo 'openid: '.$openid.' ; access_token'.$access_token."\n";
 
 		  	$data['pageTitle'] = 'All Orders';
@@ -82,7 +83,7 @@ class User extends CI_Controller {
 		}
 	}
 	function addOrder(){
-		$this->load->model('OrderModel');
+		$this->load->model('Order_model');
 		if (!session_id()) session_start();
 		$user = $_SESSION['user'];
 		if(!$user){
@@ -108,7 +109,7 @@ class User extends CI_Controller {
 				print('信息错误，订单添加失败...<br>'.$time.'秒后自动跳转。');
 				return ;
 			}
-			$order = $this->OrderModel->add($data);
+			$order = $this->Order_model->add($data);
 			if (!isset($order)) {
 				$time = 3;
 				header("refresh:$time;url=orderPage");
@@ -121,10 +122,10 @@ class User extends CI_Controller {
 		}
 	}
 	function taSelectPage(){
-		$this->load->model('TaModel');
+		$this->load->model('Ta_model');
 		if (!session_id()) session_start();
 		$order = $_SESSION['order'];
-		$taList = $this->TaModel->searchBySkills($order['major']);
+		$taList = $this->Ta_model->searchBySkills($order['major']);
 		$data['pageTitle'] = '推荐 TA';
 		$data['taList'] = $taList;
 		$this->load->view('userHeader', $data);
@@ -134,11 +135,11 @@ class User extends CI_Controller {
 	function selectTa(){
 		$taIdList = $_POST['taIdList'];
 		$taList = array();
-		$this->load->model('TaModel');
+		$this->load->model('Ta_model');
 		$max = 0;
 		$min = 100000;
 		foreach ($taIdList as $taId) {
-			$ta = $this->TaModel->searchById($taId);
+			$ta = $this->Ta_model->searchById($taId);
 			$taList[$taId] = $ta;
 			if($ta->unitPrice > $max){
 				$max = $ta->unitPrice;
@@ -168,8 +169,8 @@ class User extends CI_Controller {
 		$order['hasPaid'] = 1;
 		date_default_timezone_set('PRC');
 		$order['paidTime'] = date('Y-m-d h:i:s');
-		$this->load->model('OrderModel');
-		$this->OrderModel->update($order);
+		$this->load->model('Order_model');
+		$this->Order_model->update($order);
 		//推送给TA
 
 		$selectedTa = $_SESSION['taList'];
@@ -178,13 +179,13 @@ class User extends CI_Controller {
 			$data['taId'] = $ta->id;
 			$data['orderNum'] = $order['orderNum'];
 			$data['createTime'] = date('Y-m-d h:i:s');
-			$this->OrderModel->selectTa($data);
+			$this->Order_model->selectTa($data);
 			}
 		// }else{
 		// 	$data['taId'] = $selectedTa['id'];
 		// 	$data['orderNum'] = $order['orderNum'];
 		// 	$data['createTime'] = date('Y-m-d h:i:s');
-		// 	$this->OrderModel->selectTa($data);
+		// 	$this->Order_model->selectTa($data);
 		// }
 		
 		//跳转到未接单界面
@@ -199,8 +200,8 @@ class User extends CI_Controller {
 			echo 'please login';
 		}else{
 			$data['pageTitle'] = 'Unpaid Orders';
-			$this->load->model('OrderModel');
-			$data['orderList'] = $this->OrderModel->searchBy2('userId', $user->id, 'hasPaid', 0);
+			$this->load->model('Order_model');
+			$data['orderList'] = $this->Order_model->searchBy2('userId', $user->id, 'hasPaid', 0);
 			$this->load->view('userHeader', $data);
 			$this->load->view('orderList');
 			$this->load->view('userFooter');
@@ -213,8 +214,8 @@ class User extends CI_Controller {
 			echo 'please login';
 		}else{
 			$data['pageTitle'] = 'Untakenhed Orders';
-			$this->load->model('OrderModel');
-			$data['orderList'] = $this->OrderModel->searchBy3('userId', $user->id, 'hasPaid', 1, 'hasTaken', 0);
+			$this->load->model('Order_model');
+			$data['orderList'] = $this->Order_model->searchBy3('userId', $user->id, 'hasPaid', 1, 'hasTaken', 0);
 			$this->load->view('userHeader', $data);
 			$this->load->view('orderList');
 			$this->load->view('userFooter');
@@ -227,8 +228,8 @@ class User extends CI_Controller {
 			echo 'please login';
 		}else{
 			$data['pageTitle'] = 'Unfinished Orders';
-			$this->load->model('OrderModel');
-			$data['orderList'] = $this->OrderModel->searchBy3('userId', $user->id, 'hasTaken', 1, 'hasFinished', 0);
+			$this->load->model('Order_model');
+			$data['orderList'] = $this->Order_model->searchBy3('userId', $user->id, 'hasTaken', 1, 'hasFinished', 0);
 			$this->load->view('userHeader', $data);
 			$this->load->view('orderList');
 			$this->load->view('userFooter');
@@ -241,8 +242,8 @@ class User extends CI_Controller {
 			echo 'please login';
 		}else{
 			$data['pageTitle'] = 'Finished Orders';
-			$this->load->model('OrderModel');
-			$data['orderList'] = $this->OrderModel->searchBy3('userId', $user->id, 'hasPaid', 1, 'hasFinished', 1);
+			$this->load->model('Order_model');
+			$data['orderList'] = $this->Order_model->searchBy3('userId', $user->id, 'hasPaid', 1, 'hasFinished', 1);
 			$this->load->view('userHeader', $data);
 			$this->load->view('orderList');
 			$this->load->view('userFooter');

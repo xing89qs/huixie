@@ -8,8 +8,8 @@ class Ta extends CI_Controller {
 	function taList()
 	{
 		$data['pageTitle'] = '所有 TA';
-		$this->load->model('TaModel');
-		$data['taList'] = $this->TaModel->getAll();
+		$this->load->model('Ta_model');
+		$data['taList'] = $this->Ta_model->getAll();
 		$this->load->view('adminHeader', $data);
 		$this->load->view('taList');
 		$this->load->view('adminFooter');
@@ -21,7 +21,7 @@ class Ta extends CI_Controller {
 		$this->load->view('adminFooter');
 	}
 	function addTa(){
-		$this->load->model('TaModel');
+		$this->load->model('Ta_model');
 		$data['name']=$_POST['name'];
 		$data['email']=$_POST['email'];
 		$data['skills']=$_POST['skills'];
@@ -34,7 +34,7 @@ class Ta extends CI_Controller {
 			header("refresh:$time;url=addTaPage");
 			print('添加失败...<br>'.$time.'秒后自动跳转。');
 		}
-		if (!$this->TaModel->add($data)) {
+		if (!$this->Ta_model->add($data)) {
 			$time = 3;
 			header("refresh:$time;url=addTaPage");
 			print('添加失败...<br>'.$time.'秒后自动跳转。');
