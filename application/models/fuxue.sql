@@ -18,6 +18,7 @@ create table `user`(
 `remark` varchar(64),
 `groupid` varchar(64),
 `subscribe_time` int(11),
+`subscribe` tinyint(4),
 
 `university` varchar(64) DEFAULT NULL,
 `email` varchar(128) DEFAULT NULL,

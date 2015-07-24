@@ -70,6 +70,12 @@ class User extends CI_Controller {
 			$this->load->view('userFooter');
 	}
 	function checkLogin(){
+		if (!session_id()) session_start();
+		if(isset($_SESSION['user'])){
+			var_dump($_SESSION['user']);
+			return true;
+		}
+
 		if(isset($_GET['code'])) {
 			$appid = 'wxcd901e4412fc040b';
 			$appsecret = '16a24c163a44ee41fa3ef630c1c455ec';
@@ -87,14 +93,15 @@ class User extends CI_Controller {
 		  	if(isset($result[0])){
 		  		$user = $result[0];
 		  	}else{
-		  		$user = $this->Weixin_model->getFollowerInfo($openid);
-		  		if(isset($user['errorcode'])){
+		  		$followerInfo = $this->Weixin_model->getFollowerInfo($openid);
+		  		if(isset($followerInfo['errorcode'])){
 		  			echo '登陆失败, 请关闭网页重连';
 					exit(0);
 		  		}
 		  		date_default_timezone_set('PRC');
-		  		$user['createTime'] = date('Y-m-d h:i:s'); 
-		  		$this->User_model->add($user);
+		  		$followerInfo['createTime'] = date('Y-m-d h:i:s'); 
+		  		$this->User_model->add($followerInfo);
+		  		$user = $this->User_model->searchById($openid);
 		  	}
 	  		if (!session_id()) session_start();
 			$_SESSION['user'] = $user;
@@ -153,6 +160,63 @@ class User extends CI_Controller {
 		$this->load->view('userHeader', $data);
 		$this->load->view('userSelectTa');
 		$this->load->view('userFooter');
+	}
+	function taRegisterPage(){
+			$this->checkLogin();
+
+		  	$data['pageTitle'] = '成为助教';
+			$this->load->view('userHeader',$data);
+			$this->load->view('user_become_ta');
+			$this->load->view('userFooter');
+	}
+	function taRegister(){
+		$this->checkLogin();
+		$user = $_SESSION['user'];
+		$this->load->model('Ta_model');
+		$result = $this->Ta_model->searchById($user->openid);
+		if(isset($result[0])){
+			$time = 3;
+			header("refresh:$time;url=taInfoPage");
+			//以后应该改成自动填充，修改TA信息
+			print('您已经是TA...<br>'.$time.'秒后自动跳转。');
+			return;
+		}
+
+		$data['openid']= $user->$openid;
+
+		$data['email']=$_POST['email'];
+		$data['skills']=$_POST['skills'];
+		$data['star'] = $_POST['star'];
+		$data['unitPrice'] = $_POST['unitPrice'];
+		date_default_timezone_set('PRC');
+		$data['createTime'] = date('Y-m-d h:i:s');
+		if(!isset($data['name'])){
+			$time = 3;
+			header("refresh:$time;url=taRegisterPage");
+			print('填写的信息错误...<br>'.$time.'秒后自动跳转。');
+		}
+		if (!$this->Ta_model->add($data)) {
+			$time = 3;
+			header("refresh:$time;url=taRegisterPage");
+			print('添加失败...<br>'.$time.'秒后自动跳转。');
+		}else{
+			redirect('user/taInfoPage');
+		}
+	}
+	function taInfoPage(){
+		$this->checkLogin();
+		$user = $_SESSION['user'];
+		$this->load->model('Ta_model');
+		$result = $this->Ta_model->searchById($user->openid);
+		if(isset($result[0])){
+			$data['ta'] = $result[0];
+			$data['pageTitle'] = '助教信息';
+			$this->load->view('userHeader',$data);
+			$this->load->view('user_ta-info');
+			$this->load->view('userFooter');
+		}else{
+			echo '您不是TA';
+		}
 	}
 	function selectTa(){
 		$taIdList = $_POST['taIdList'];
