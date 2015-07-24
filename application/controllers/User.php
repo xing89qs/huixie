@@ -142,7 +142,7 @@ class User extends CI_Controller {
 			print('信息错误，订单添加失败...<br>'.$time.'秒后自动跳转。');
 		}else{
 			$data['id'] = $order[0]->id;
-			$_SESSION['order'] = $order;
+			$_SESSION['order'] = $data;
 			redirect('user/taSelectPage');
 		}
 	}
@@ -150,7 +150,7 @@ class User extends CI_Controller {
 		$this->checkLogin();
 		$this->load->model('Ta_model');
 		$order = $_SESSION['order'];
-		$taList = $this->Ta_model->searchBySkills($order->marjor);
+		$taList = $this->Ta_model->searchBySkills($order['major']);
 		$data['pageTitle'] = '推荐 TA';
 		$data['taList'] = $taList;
 		$this->load->view('userHeader', $data);
