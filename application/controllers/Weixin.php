@@ -8,11 +8,17 @@ class Weixin extends CI_Controller {
 	//默认入口
 	function index(){
 		$this->log('index start <-----------------------------------------------');
-		$this->load->model('CtokenModel');
-		
+		// $this->load->model('Ctoken_model');
+		// echo $this->Ctoken_model->getAccessToken();;
+
+		$this->load->model('Weixin_model');
+		$this->Weixin_model->getAllFollower();
+		$this->Weixin_model->getFollowerInfo('oJWDev7W6DN_6gKuLumLPoOUeky4');
+
 		//url encode
-		$url = 'http://nomoredue.com/huixie/index.php/user/orderPage';
-		echo urlencode($url);
+		// 授权接口需要转码
+		// $url = 'http://nomoredue.com/huixie/index.php/user/orderPage';
+		// echo urlencode($url);
 		
 		$this->log('index end ==================================================>');
 	}
@@ -22,7 +28,6 @@ class Weixin extends CI_Controller {
 		$token = 'Ex2ZupGFEqr6RGucCCB8R2DjnJd4T9ZfT2sdvOrf_cgYZNYCfy7Dhyiglga8-kc8b4H4XlHvO5-o6dZb1Wk5YBnVzTfMC--oXtwa9516-bY';
 		return $token;
 	}
-
 //  https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd901e4412fc040b&redirect_uri=http%3A%2F%2Fnomoredue.com%2Fhuixie%2Findex.php%2Fuser%2ForderPage&response_type=code&scope=snsapi_base&state=fuxue#wechat_redirect
 
 	//添加自定义菜单函数

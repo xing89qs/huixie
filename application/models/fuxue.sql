@@ -6,16 +6,28 @@ use fuxue;
 
 #用户表
 create table `user`(
-`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`name` varchar(64),
-`university` varchar(64),
-`email` varchar(128),
+`openid` varchar(255) NOT NULL PRIMARY KEY,
+`unionid` varchar(255) NOT NULL,
+`nickname` varchar(64),
+`sex` tinyint(4),
+`city` varchar(255),
+`country` varchar(255),
+`province` varchar(255),
+`language` varchar(64),
+`headimgurl` text,
+`remark` varchar(64),
+`groupid` varchar(64),
+`subscribe_time` int(11),
+
+`university` varchar(64) DEFAULT NULL,
+`email` varchar(128) DEFAULT NULL,
+
 `createTime` datetime NOT NULL,
 )
 
 #TA表
 create table `ta`(
-`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`openid` varchar(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `name` varchar(64),
 `skills` varchar(128),
 `star` float,
@@ -36,7 +48,7 @@ create table `order`(
 `endTime` datetime NOT NULL,
 `requirement` text,
 
-`userId` int(11) NOT NULL,
+`userId` varchar(255) NOT NULL,
 `taId` int(11),
 `price` int(11),
 `hasPaid` tinyint(4) DEFAULT 0,
@@ -57,8 +69,13 @@ create table `selectedTa`(
 
 #access_token列表
 create table `ctoken`(
-`appId` varchar(255) NOT NULL,
+`appid` varchar(255) NOT NULL,
 `token` varchar(255) DEFAULT NULL,
 `expire` int(11) DEFAULT NULL,
 `createTime` int(11) DEFAULT NULL
+)
+
+create table `admin`(
+`name` varchar(64),
+`password` varchar(64)
 )

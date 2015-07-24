@@ -10,15 +10,15 @@ class Ta extends CI_Controller {
 		$data['pageTitle'] = '所有 TA';
 		$this->load->model('Ta_model');
 		$data['taList'] = $this->Ta_model->getAll();
-		$this->load->view('adminHeader', $data);
-		$this->load->view('taList');
-		$this->load->view('adminFooter');
+		$this->load->view('admin_header', $data);
+		$this->load->view('ta_list');
+		$this->load->view('admin_footer');
 	}
 	function addTaPage(){
 		$data['pageTitle'] = '添加 TA';
-		$this->load->view('adminHeader',$data);
-		$this->load->view('addTA');
-		$this->load->view('adminFooter');
+		$this->load->view('admin_header',$data);
+		$this->load->view('add_tA');
+		$this->load->view('admin_footer');
 	}
 	function addTa(){
 		$this->load->model('Ta_model');

@@ -11,15 +11,15 @@ class User extends CI_Controller {
 		$data['pageTitle'] = '所有用户';
 		$this->load->model('User_model');
 		$data['userList'] = $this->User_model->getAll();
-		$this->load->view('adminHeader',$data);		
-		$this->load->view('userList');
-		$this->load->view('adminFooter');
+		$this->load->view('admin_header',$data);		
+		$this->load->view('user_list');
+		$this->load->view('admin_footer');
 	}
 	function registerPage(){
 		$data['pageTitle']='添加用户';
-		$this->load->view('adminHeader',$data);
-		$this->load->view('addUser');
-		$this->load->view('adminFooter');
+		$this->load->view('admin_header',$data);
+		$this->load->view('add_user');
+		$this->load->view('admin_footer');
 	}
 	function register(){
 		$this->load->model('User_model');
@@ -62,6 +62,14 @@ class User extends CI_Controller {
 		}
 	}
 	function orderPage(){
+			$this->checkLogin();
+
+		  	$data['pageTitle'] = 'All Orders';
+			$this->load->view('userHeader',$data);
+			$this->load->view('addOrder');
+			$this->load->view('userFooter');
+	}
+	function checkLogin(){
 		if(isset($_GET['code'])) {
 			$appid = 'wxcd901e4412fc040b';
 			$appsecret = '16a24c163a44ee41fa3ef630c1c455ec';
@@ -69,16 +77,26 @@ class User extends CI_Controller {
 			$para = array('appid'=>$appid, 'secret'=>$appsecret, 'code'=>$code, 'grant_type'=>'authorization_code');
 			$ret = $this->Http_model->doCurlGetRequest('https://api.weixin.qq.com/sns/oauth2/access_token',$para);
 		  	$retData = json_decode($ret);
+
 		  	$openid = $retData->openid;
 		  	$access_token = $retData->access_token;
-		  	echo 'openid: '.$openid.' ; access_token'.$access_token."\n";
-
-		  	$data['pageTitle'] = 'All Orders';
-			$this->load->view('userHeader',$data);
-			$this->load->view('addOrder');
-			$this->load->view('userFooter');
+		  	
+		  	$this->load->model('User_model');
+		  	$this->load->model('Weixin_model');
+		  	$result = $this->User_model->searchById($openid);
+		  	if(isset($result[0])){
+		  		$user = $result[0];
+		  	}else{
+		  		$user = $this->Weixin_model->getFollowerInfo($openid);
+		  		date_default_timezone_set('PRC');
+		  		$user['createTime'] = date('Y-m-d h:i:s'); 
+		  		$this->User_model->add($user);
+		  	}
+	  		if (!session_id()) session_start();
+			$_SESSION['user'] = $user;
+			var_dump($user);
 		}else{
-			echo '请登陆';
+			echo '登陆失败, 请关闭网页重连';
 			exit(0);
 		}
 	}

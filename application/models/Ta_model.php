@@ -5,7 +5,7 @@ class Ta_model extends CI_Model{
 		$this->load->database();
 	}
 	function searchById($id){
-		$this->db->where('id',$id);
+		$this->db->where('openid',$id);
 		$this->db->select('*');
 		$query=$this->db->get('ta');
 		$sae = $query->result();
@@ -44,7 +44,7 @@ class Ta_model extends CI_Model{
 	}
 	
 	function modify($id,$data){
-		$this->db->where('id',$id);
+		$this->db->where('openid',$id);
 		$this->db->update('ta',$data);
 		return $this->db->affected_rows();
 	}

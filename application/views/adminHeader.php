@@ -106,31 +106,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin管理 <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">添加Admin</a></li>
-            <li><a href="#">查看Admin列表</a></li>
+            <li><a href="<?php echo site_url("admin/adminList");?>">查看Admin列表</a></li>
+            <li><a href="<?php echo site_url("admin/modifyPage");?>">修改密码</a></li>
+            <li><a href="<?php echo site_url("admin/logout");?>">注销登陆</a></li>
           </ul>
         </li>
       </ul>
 
-      <form class="navbar-form navbar-right" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">搜索</button>
-      </form>
-      <!-- <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Link</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
-      </ul> -->
+      <ul class="nav navbar-nav navbar-right">
+      <?php if(isset($admin)): ?>
+        <li class="active"><a><?php echo $admin->name;?>，欢迎您登陆</a></li>
+      <?php else: ?>
+        <li class="active"><a href="<?php echo site_url("admin/loginPage");?>">登陆</a></li>
+      <?php endif ?>
+      </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>

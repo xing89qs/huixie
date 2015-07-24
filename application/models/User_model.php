@@ -5,11 +5,10 @@ class User_model extends CI_Model{
 		$this->load->database();
 	}
 	function searchById($id){
-		$this->db->where('id',$id);
+		$this->db->where('openid',$id);
 		$this->db->select('*');
 		$query=$this->db->get('user');
-		$sae = $query->result();
-		return $sae[0];
+		return $query->result();
 	}
 	function getAll(){
 		$this->db->select('*');
