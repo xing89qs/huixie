@@ -76,7 +76,7 @@ class User extends CI_Controller {
 			$code = $_GET['code'];
 			$para = array('appid'=>$appid, 'secret'=>$appsecret, 'code'=>$code, 'grant_type'=>'authorization_code');
 			$ret = $this->Http_model->doCurlGetRequest('https://api.weixin.qq.com/sns/oauth2/access_token',$para);
-		  	$retData = json_decode($ret);
+		  	$retData = json_decode($ret, true);
 
 		  	$openid = $retData['openid'];
 		  	$access_token = $retData['access_token'];
