@@ -170,7 +170,7 @@ class User extends CI_Controller {
 		$user = $_SESSION['user'];
 		$this->load->model('Ta_model');
 		$result = $this->Ta_model->searchById($user->openid);
-		if(isset($result[0])){
+		if(isset($result)){
 			$time = 3;
 			header("refresh:$time;url=taInfoPage");
 			//以后应该改成自动填充，修改TA信息
@@ -286,7 +286,7 @@ class User extends CI_Controller {
 		}else{
 			$data['pageTitle'] = 'Unpaid Orders';
 			$this->load->model('Order_model');
-			$data['orderList'] = $this->Order_model->searchBy2('userId', $user->id, 'hasPaid', 0);
+			$data['orderList'] = $this->Order_model->searchBy2('userId', $user->openid, 'hasPaid', 0);
 			$this->load->view('userHeader', $data);
 			$this->load->view('orderList');
 			$this->load->view('userFooter');
