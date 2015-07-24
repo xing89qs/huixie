@@ -8,7 +8,7 @@ class Ta_model extends CI_Model{
 		$this->db->where('openid',$id);
 		$this->db->select('*');
 		$query=$this->db->get('ta');
-		return $query->result();
+		return $query->result()[0];
 	}
 	function getAll(){
 		$this->db->select('*');

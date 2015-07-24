@@ -260,7 +260,8 @@ class User extends CI_Controller {
 		$selectedTa = $_SESSION['taList'];
 		// if(is_array($selectedTa)){
 			foreach ($selectedTa as $ta) {
-			$data['taId'] = $ta->id;
+				echo '推送的人的名字：'.$ta->name."\n";
+			$data['taId'] = $ta->openid;
 			$data['orderNum'] = $order['orderNum'];
 			$data['createTime'] = date('Y-m-d h:i:s');
 			$this->Order_model->selectTa($data);

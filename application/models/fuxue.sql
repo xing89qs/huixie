@@ -63,7 +63,7 @@ create table `order`(
 #推送的TA列表
 create table `selectedTa`(
 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`taId` int(11) NOT NULL,
+`taId` varchar(255) NOT NULL,
 `orderNum` varchar(64) NOT NULL,
 `createTime` datetime NOT NULL
 )
