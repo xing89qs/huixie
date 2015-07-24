@@ -12,8 +12,9 @@ class Weixin extends CI_Controller {
 		// echo $this->Ctoken_model->getAccessToken();;
 
 		$this->load->model('Weixin_model');
-		$this->Weixin_model->getAllFollower();
-		$this->Weixin_model->getFollowerInfo('oJWDev7W6DN_6gKuLumLPoOUeky4');
+		// $this->Weixin_model->getAllFollower();
+		// $this->Weixin_model->getFollowerInfo('oJWDev7W6DN_6gKuLumLPoOUeky4');
+		$this->Weixin_model->sendTemplateMessage();
 
 		//url encode
 		// 授权接口需要转码

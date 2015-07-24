@@ -256,11 +256,14 @@ class User extends CI_Controller {
 		$this->load->model('Order_model');
 		$this->Order_model->update($order);
 		//推送给TA
+		$this->load->model('Weixin_model');
 
 		$selectedTa = $_SESSION['taList'];
 		// if(is_array($selectedTa)){
 			foreach ($selectedTa as $ta) {
 				echo '推送的人的名字：'.$ta->name."\n";
+			$this->Weixin_model->sendMessageToTa($order, $ta->openid);
+
 			$data['taId'] = $ta->openid;
 			$data['orderNum'] = $order['orderNum'];
 			$data['createTime'] = date('Y-m-d h:i:s');
