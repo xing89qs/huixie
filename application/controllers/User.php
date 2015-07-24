@@ -112,49 +112,45 @@ class User extends CI_Controller {
 		}
 	}
 	function addOrder(){
+		$this->checkLogin();
 		$this->load->model('Order_model');
-		if (!session_id()) session_start();
 		$user = $_SESSION['user'];
-		if(!$user){
-			echo 'please login';
-		}else{
 
-			// 2015-07-14T08:55Z
-			echo $_POST['endTime'];
-			$data['major'] = $_POST['major'];
-			$data['courseName'] = $_POST['courseName'];
-			$data['email'] = $_POST['email'];
-			$data['pageNum'] = $_POST['pageNum'];
-			$data['refDoc'] = $_POST['refDoc'];
-			$data['requirement'] = $_POST['requirement'];
-			$data['endTime'] = $_POST['endTime'];
-			$data['userId'] = $user->id;
-			date_default_timezone_set('PRC');
-			$data['createTime'] = date('Y-m-d h:i:s');
-			$data['orderNum'] = time();
-			if(!(isset($data['major']) and isset($data['courseName']) and isset($data['userId']) and isset($data['email'])) ){
-				$time = 3;
-				header("refresh:$time;url=orderPage");
-				print('信息错误，订单添加失败...<br>'.$time.'秒后自动跳转。');
-				return ;
-			}
-			$order = $this->Order_model->add($data);
-			if (!isset($order)) {
-				$time = 3;
-				header("refresh:$time;url=orderPage");
-				print('信息错误，订单添加失败...<br>'.$time.'秒后自动跳转。');
-			}else{
-				$data['id'] = $order[0]->id;
-				$_SESSION['order'] = $data;
-				redirect('user/taSelectPage');
-			}
+		// 2015-07-14T08:55Z
+		// echo $_POST['endTime'];
+		$data['major'] = $_POST['major'];
+		$data['courseName'] = $_POST['courseName'];
+		$data['email'] = $_POST['email'];
+		$data['pageNum'] = $_POST['pageNum'];
+		$data['refDoc'] = $_POST['refDoc'];
+		$data['requirement'] = $_POST['requirement'];
+		$data['endTime'] = $_POST['endTime'];
+		$data['userId'] = $user->openid;
+		date_default_timezone_set('PRC');
+		$data['createTime'] = date('Y-m-d h:i:s');
+		$data['orderNum'] = time();
+		if(!(isset($data['major']) and isset($data['courseName']) and isset($data['userId']) and isset($data['email'])) ){
+			$time = 3;
+			header("refresh:$time;url=orderPage");
+			print('信息错误，订单添加失败...<br>'.$time.'秒后自动跳转。');
+			return ;
+		}
+		$order = $this->Order_model->add($data);
+		if (!isset($order)) {
+			$time = 3;
+			header("refresh:$time;url=orderPage");
+			print('信息错误，订单添加失败...<br>'.$time.'秒后自动跳转。');
+		}else{
+			$data['id'] = $order[0]->id;
+			$_SESSION['order'] = $order;
+			redirect('user/taSelectPage');
 		}
 	}
 	function taSelectPage(){
+		$this->checkLogin();
 		$this->load->model('Ta_model');
-		if (!session_id()) session_start();
 		$order = $_SESSION['order'];
-		$taList = $this->Ta_model->searchBySkills($order['major']);
+		$taList = $this->Ta_model->searchBySkills($order->marjor);
 		$data['pageTitle'] = '推荐 TA';
 		$data['taList'] = $taList;
 		$this->load->view('userHeader', $data);
@@ -182,12 +178,13 @@ class User extends CI_Controller {
 			return;
 		}
 
-		$data['openid']= $user->$openid;
+		$data['openid']= $user->openid;
 
 		$data['email']=$_POST['email'];
 		$data['skills']=$_POST['skills'];
 		$data['star'] = $_POST['star'];
 		$data['unitPrice'] = $_POST['unitPrice'];
+		$data['name'] = $user->nickname;
 		date_default_timezone_set('PRC');
 		$data['createTime'] = date('Y-m-d h:i:s');
 		if(!isset($data['name'])){
@@ -212,13 +209,14 @@ class User extends CI_Controller {
 			$data['ta'] = $result[0];
 			$data['pageTitle'] = '助教信息';
 			$this->load->view('userHeader',$data);
-			$this->load->view('user_ta-info');
+			$this->load->view('user_ta_info');
 			$this->load->view('userFooter');
 		}else{
 			echo '您不是TA';
 		}
 	}
 	function selectTa(){
+		$this->checkLogin();
 		$taIdList = $_POST['taIdList'];
 		$taList = array();
 		$this->load->model('Ta_model');
