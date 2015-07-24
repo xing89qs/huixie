@@ -46,9 +46,20 @@ class Order_model extends CI_Model{
 		$this->db->update('order',$data);
 		return $this->db->affected_rows();
 	}
+	function takeOrder($orderNum){
+		$this->db->where('orderNum',$orderNum);
+		$this->db->update('hasTaken',1);
+		return $this->db->affected_rows();
+	}
 	function selectTa($data){
 		$this->db->query($this->db->insert_string('selectedTa',$data));
 		return $this->db->affected_rows();
+	}
+	function searchSelectTa($taId){
+		$this->db->where('taId', $taId);
+		$this->db->select('*');
+		$query=$this->db->get('selectedTa');
+		return $query->result()[0];
 	}
 }
 ?>

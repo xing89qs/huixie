@@ -19,18 +19,18 @@ class Weixin_model extends CI_Model{
 
 		return $retData;
 	}
-	function sendMessageToTa($order, $openid){
+	function sendMessageToTa($order, $openid, $first){
 		$this->load->model('Ctoken_model');
 		$token = $this->Ctoken_model->getAccessToken();
 		$this->load->model('Http_model');
 		$template = array(
 			'touser' => $openid,
 			'template_id' => 'eQP5IFYGaECRLMtn4mLq2gmV_Zygcs9pfggzfmT_tO4',
-			'url' => 'http://weixin.qq.com/download',
+			'url' => 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd901e4412fc040b&redirect_uri=http%3A%2F%2Fnomoredue.com%2Fhuixie%2Findex.php%2Fta%2FtakeOrderPage&response_type=code&scope=snsapi_base&state=fuxue#wechat_redirect',
 			'topcolor' => '#FF0000',
 			'data'=>array(
 				'first' =>array(
-					'value' => '有新的订单提醒',
+					'value' => $first,
 					'color' => '#173177'
 				),
 				'keyword1' =>array(

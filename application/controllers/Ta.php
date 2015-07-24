@@ -42,5 +42,66 @@ class Ta extends CI_Controller {
 			redirect('ta/taList');
 		}
 	}
+
+	function takeOrderPage(){
+		$this->checkLogin();
+		$this->load->model('Order_model');
+		$select = $this->Order_model->searchSelectTa();
+		$order = $this->Order_model->selectBy1('orderNum', $select->orderNum);
+
+			$data['pageTitle'] = '接单';
+			$data['order'] = $order;
+			$this->load->view('userHeader',$data);
+			$this->load->view('ta_take_order');
+			$this->load->view('userFooter');
+
+	}
+	function takeOrder(){
+		$orderNum = $_POST['orderNum'];
+		$this->Order_model->takeOrder($orderNum);
+		echo '接单成功';
+	}
+	function checkLogin(){
+		if (!session_id()) session_start();
+		if(isset($_SESSION['user'])){
+			var_dump($_SESSION['user']);
+			return true;
+		}
+
+		if(isset($_GET['code'])) {
+			$appid = 'wxcd901e4412fc040b';
+			$appsecret = '16a24c163a44ee41fa3ef630c1c455ec';
+			$code = $_GET['code'];
+			$para = array('appid'=>$appid, 'secret'=>$appsecret, 'code'=>$code, 'grant_type'=>'authorization_code');
+			$ret = $this->Http_model->doCurlGetRequest('https://api.weixin.qq.com/sns/oauth2/access_token',$para);
+		  	$retData = json_decode($ret, true);
+
+		  	$openid = $retData['openid'];
+		  	$access_token = $retData['access_token'];
+
+		  	$this->load->model('User_model');
+		  	$this->load->model('Weixin_model');
+		  	$result = $this->User_model->searchById($openid);
+		  	if(isset($result[0])){
+		  		$user = $result[0];
+		  	}else{
+		  		$followerInfo = $this->Weixin_model->getFollowerInfo($openid);
+		  		if(isset($followerInfo['errorcode'])){
+		  			echo '登陆失败, 请关闭网页重连';
+					exit(0);
+		  		}
+		  		date_default_timezone_set('PRC');
+		  		$followerInfo['createTime'] = date('Y-m-d h:i:s'); 
+		  		$this->User_model->add($followerInfo);
+		  		$user = $this->User_model->searchById($openid);
+		  	}
+	  		if (!session_id()) session_start();
+			$_SESSION['user'] = $user;
+			var_dump($user);
+		}else{
+			echo '登陆失败, 请关闭网页重连';
+			exit(0);
+		}
+	}
 	
 }

@@ -262,7 +262,7 @@ class User extends CI_Controller {
 		// if(is_array($selectedTa)){
 			foreach ($selectedTa as $ta) {
 				echo '推送的人的名字：'.$ta->name."\n";
-			$this->Weixin_model->sendMessageToTa($order, $ta->openid);
+			$this->Weixin_model->sendMessageToTa($order, $ta->openid, '有新的订单提醒');
 
 			$data['taId'] = $ta->openid;
 			$data['orderNum'] = $order['orderNum'];
