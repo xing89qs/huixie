@@ -300,7 +300,7 @@ class User extends CI_Controller {
 		}else{
 			$data['pageTitle'] = 'Untakenhed Orders';
 			$this->load->model('Order_model');
-			$data['orderList'] = $this->Order_model->searchBy3('userId', $user->id, 'hasPaid', 1, 'hasTaken', 0);
+			$data['orderList'] = $this->Order_model->searchBy3('userId', $user->openid, 'hasPaid', 1, 'hasTaken', 0);
 			$this->load->view('userHeader', $data);
 			$this->load->view('orderList');
 			$this->load->view('userFooter');
@@ -314,7 +314,7 @@ class User extends CI_Controller {
 		}else{
 			$data['pageTitle'] = 'Unfinished Orders';
 			$this->load->model('Order_model');
-			$data['orderList'] = $this->Order_model->searchBy3('userId', $user->id, 'hasTaken', 1, 'hasFinished', 0);
+			$data['orderList'] = $this->Order_model->searchBy3('userId', $user->openid, 'hasTaken', 1, 'hasFinished', 0);
 			$this->load->view('userHeader', $data);
 			$this->load->view('orderList');
 			$this->load->view('userFooter');
@@ -328,7 +328,7 @@ class User extends CI_Controller {
 		}else{
 			$data['pageTitle'] = 'Finished Orders';
 			$this->load->model('Order_model');
-			$data['orderList'] = $this->Order_model->searchBy3('userId', $user->id, 'hasPaid', 1, 'hasFinished', 1);
+			$data['orderList'] = $this->Order_model->searchBy3('userId', $user->openid, 'hasPaid', 1, 'hasFinished', 1);
 			$this->load->view('userHeader', $data);
 			$this->load->view('orderList');
 			$this->load->view('userFooter');
