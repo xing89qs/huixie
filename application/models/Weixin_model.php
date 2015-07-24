@@ -16,7 +16,7 @@ class Weixin_model extends CI_Model{
 		$ret = $this->Http_model->doCurlGetRequest($url, $para);
 		$retData = json_decode($ret, true);
 		var_dump($retData);
-		
+
 		return $retData;
 	}
 

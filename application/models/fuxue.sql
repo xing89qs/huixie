@@ -22,12 +22,12 @@ create table `user`(
 `university` varchar(64) DEFAULT NULL,
 `email` varchar(128) DEFAULT NULL,
 
-`createTime` datetime NOT NULL,
+`createTime` datetime NOT NULL
 )
 
 #TA表
 create table `ta`(
-`openid` varchar(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`openid` varchar(255) NOT NULL PRIMARY KEY,
 `name` varchar(64),
 `skills` varchar(128),
 `star` float,
@@ -49,7 +49,7 @@ create table `order`(
 `requirement` text,
 
 `userId` varchar(255) NOT NULL,
-`taId` int(11),
+`taId` varchar(255),
 `price` int(11),
 `hasPaid` tinyint(4) DEFAULT 0,
 `hasTaken` tinyint(4) DEFAULT 0,
@@ -70,12 +70,12 @@ create table `selectedTa`(
 #access_token列表
 create table `ctoken`(
 `appid` varchar(255) NOT NULL,
-`token` varchar(255) DEFAULT NULL,
+`token` varchar(255) PRIMARY KEY,
 `expire` int(11) DEFAULT NULL,
 `createTime` int(11) DEFAULT NULL
 )
 
 create table `admin`(
-`name` varchar(64),
+`name` varchar(64) NOT NUll PRIMARY KEY,
 `password` varchar(64)
 )

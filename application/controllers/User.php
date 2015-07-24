@@ -78,9 +78,9 @@ class User extends CI_Controller {
 			$ret = $this->Http_model->doCurlGetRequest('https://api.weixin.qq.com/sns/oauth2/access_token',$para);
 		  	$retData = json_decode($ret);
 
-		  	$openid = $retData->openid;
-		  	$access_token = $retData->access_token;
-		  	
+		  	$openid = $retData['openid'];
+		  	$access_token = $retData['access_token'];
+
 		  	$this->load->model('User_model');
 		  	$this->load->model('Weixin_model');
 		  	$result = $this->User_model->searchById($openid);
@@ -88,6 +88,10 @@ class User extends CI_Controller {
 		  		$user = $result[0];
 		  	}else{
 		  		$user = $this->Weixin_model->getFollowerInfo($openid);
+		  		if(isset($user['errorcode'])){
+		  			echo '登陆失败, 请关闭网页重连';
+					exit(0);
+		  		}
 		  		date_default_timezone_set('PRC');
 		  		$user['createTime'] = date('Y-m-d h:i:s'); 
 		  		$this->User_model->add($user);
