@@ -158,7 +158,7 @@ class User extends CI_Controller {
 		$order = $_SESSION['order'];
 		$taList = $this->Ta_model->searchBySkills($order['major']);
 		$length = count($taList);
-		for ($i=0; $i < length; $i++) { 
+		for ($i=0; $i < $length; $i++) { 
 			$taList[$i]['userInfo'] = $this->User_model->searchById($taList[$i]['openid']);
 		}
 

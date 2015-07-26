@@ -26,7 +26,7 @@ class Weixin_model extends CI_Model{
 		$template = array(
 			'touser' => $openid,
 			'template_id' => 'eQP5IFYGaECRLMtn4mLq2gmV_Zygcs9pfggzfmT_tO4',
-			'url' => 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd901e4412fc040b&redirect_uri=http%3A%2F%2Fnomoredue.com%2Fhuixie%2Findex.php%2Fta%2FtakeOrderPage&response_type=code&scope=snsapi_base&state=fuxue#wechat_redirect',
+			'url' => 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcd901e4412fc040b&redirect_uri=http%3A%2F%2Fhuixie.me%2Fhuixie%2Findex.php%2Fta%2FtakeOrderPage&response_type=code&scope=snsapi_base&state=fuxue#wechat_redirect',
 			'topcolor' => '#FF0000',
 			'data'=>array(
 				'first' =>array(
