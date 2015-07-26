@@ -9,7 +9,7 @@
 	<label>
     	<input type="checkbox" name="taIdList[]" value="<?php echo $ta['openid'];?>">
   		</label>
-		<img src="http://dailyquestion.sinaapp.com/upload/head/default.jpg" alt="..." class="img-circle" style="width:120px;height:120px">
+		<img src="hhttp://wx.qlogo.cn/mmopen/Wia29mribmjBbicZoicnvXet5PichHW4GsiaRqWLtqRLeXqj3QpEfB4DAGLw34ajXSIGxGcRxlZddUvdxicojPUTjBGaA/0" alt="..." class="img-circle" style="width:120px;height:120px">
   		
   		<br>
   		<label>姓名：<?php echo $ta['name'];?></label>
