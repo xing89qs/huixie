@@ -7,7 +7,7 @@
 <?php if(!empty($taList))foreach ($taList as $ta):?>
 	<div class="checkbox">
 	<label>
-    	<input type="checkbox" name="taIdList[]" value="<?php echo $ta->openid;?>">
+    	<input type="checkbox" name="taIdList[]" value="<?php echo $ta['openid'];?>">
   		</label>
 		<img src="http://dailyquestion.sinaapp.com/upload/head/default.jpg" alt="..." class="img-circle" style="width:120px;height:120px">
   		
