@@ -90,8 +90,8 @@ class User extends CI_Controller {
 		  	$this->load->model('User_model');
 		  	$this->load->model('Weixin_model');
 		  	$result = $this->User_model->searchById($openid);
-		  	if(isset($result[0])){
-		  		$user = $result[0];
+		  	if($result){
+		  		$user = $result;
 		  	}else{
 		  		$followerInfo = $this->Weixin_model->getFollowerInfo($openid);
 		  		if(isset($followerInfo['errorcode'])){
