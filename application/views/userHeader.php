@@ -81,7 +81,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
 
-        <li class="active"><a href="<?php echo site_url("user/loginPage");?>">登陆 <span class="sr-only">(current)</span></a></li>
+        <li class="active"><a href="<?php echo site_url("user/logout");?>">注销 <span class="sr-only">(current)</span></a></li>
         <li><a href="<?php echo site_url("user/orderPage");?>">添加订单 <span class="sr-only">(current)</span></a></li>
 
 

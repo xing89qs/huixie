@@ -9,10 +9,10 @@
 	<label>
     	<input type="checkbox" name="taIdList[]" value="<?php echo $ta['openid'];?>">
   		</label>
-		<img src="http://wx.qlogo.cn/mmopen/Wia29mribmjBbicZoicnvXet5PichHW4GsiaRqWLtqRLeXqj3QpEfB4DAGLw34ajXSIGxGcRxlZddUvdxicojPUTjBGaA/0" alt="..." class="img-circle" style="width:120px;height:120px">
+		<img src="<?php echo $ta['userInfo']['headimgurl'];?>" alt="..." class="img-circle" style="width:120px;height:120px">
   		
   		<br>
-  		<label>姓名：<?php echo $ta['name'];?></label>
+  		<label>姓名：<?php echo $ta['userInfo']['nickname'];?></label>
   		<label>评级：<?php echo $ta['star'];?></label>
   		<label>单价：<?php echo $ta['unitPrice'];?></label>
   		

@@ -42,6 +42,11 @@ class User extends CI_Controller {
 			redirect('user/userList');
 		}
 	}
+	function logout(){
+		if (!session_id()) session_start();
+		unset($_SESSION['user']);
+		redirect('user/loginPage');
+	}
 	function loginPage(){
 		$this->load->view('userHeader');
 		$this->load->view('userLogin');
@@ -72,7 +77,7 @@ class User extends CI_Controller {
 	function checkLogin(){
 		if (!session_id()) session_start();
 		if(isset($_SESSION['user'])){
-			var_dump($_SESSION['user']);
+			// var_dump($_SESSION['user']);
 			return true;
 		}
 
@@ -105,7 +110,7 @@ class User extends CI_Controller {
 		  	}
 	  		if (!session_id()) session_start();
 			$_SESSION['user'] = $user;
-			var_dump($user);
+			// var_dump($user);
 		}else{
 			echo '登陆失败, 请关闭网页重连';
 			exit(0);
@@ -149,8 +154,14 @@ class User extends CI_Controller {
 	function taSelectPage(){
 		$this->checkLogin();
 		$this->load->model('Ta_model');
+		$this->load->model('User_model');
 		$order = $_SESSION['order'];
 		$taList = $this->Ta_model->searchBySkills($order['major']);
+		$length = count($taList);
+		for ($i=0; $i < length; $i++) { 
+			$taList[$i]['userInfo'] = $this->User_model->searchById($taList[$i]['openid']);
+		}
+
 		$data['pageTitle'] = '推荐 TA';
 		$data['taList'] = $taList;
 		$this->load->view('userHeader', $data);
