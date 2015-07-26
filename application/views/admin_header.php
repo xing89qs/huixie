@@ -79,7 +79,7 @@ font-weight: 300;
      				   <li class="dropdown user">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						<img alt="" src="media/image/avatar1_small.jpg" />
-						<span class="username"><?php echo $admin->name;?></span>
+						<span class="username"><?php echo $admin['name'];?></span>
 						<i class="icon-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu">

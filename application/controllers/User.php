@@ -125,7 +125,7 @@ class User extends CI_Controller {
 		$data['refDoc'] = $_POST['refDoc'];
 		$data['requirement'] = $_POST['requirement'];
 		$data['endTime'] = $_POST['endTime'];
-		$data['userId'] = $user->openid;
+		$data['userId'] = $user['openid'];
 		date_default_timezone_set('PRC');
 		$data['createTime'] = date('Y-m-d h:i:s');
 		$data['orderNum'] = time();
@@ -141,7 +141,7 @@ class User extends CI_Controller {
 			header("refresh:$time;url=orderPage");
 			print('信息错误，订单添加失败...<br>'.$time.'秒后自动跳转。');
 		}else{
-			$data['id'] = $order[0]->id;
+			$data['id'] = $order['id'];
 			$_SESSION['order'] = $data;
 			redirect('user/taSelectPage');
 		}
@@ -169,7 +169,7 @@ class User extends CI_Controller {
 		$this->checkLogin();
 		$user = $_SESSION['user'];
 		$this->load->model('Ta_model');
-		$result = $this->Ta_model->searchById($user->openid);
+		$result = $this->Ta_model->searchById($user['openid']);
 		if(isset($result)){
 			$time = 3;
 			header("refresh:$time;url=taInfoPage");
@@ -178,13 +178,13 @@ class User extends CI_Controller {
 			return;
 		}
 
-		$data['openid']= $user->openid;
+		$data['openid']= $user['openid'];
 
 		$data['email']=$_POST['email'];
 		$data['skills']=$_POST['skills'];
 		$data['star'] = $_POST['star'];
 		$data['unitPrice'] = $_POST['unitPrice'];
-		$data['name'] = $user->nickname;
+		$data['name'] = $user['nickname'];
 		date_default_timezone_set('PRC');
 		$data['createTime'] = date('Y-m-d h:i:s');
 		if(!isset($data['name'])){
@@ -204,9 +204,9 @@ class User extends CI_Controller {
 		$this->checkLogin();
 		$user = $_SESSION['user'];
 		$this->load->model('Ta_model');
-		$result = $this->Ta_model->searchById($user->openid);
-		if(isset($result[0])){
-			$data['ta'] = $result[0];
+		$result = $this->Ta_model->searchById($user['openid']);
+		if($result){
+			$data['ta'] = $result;
 			$data['pageTitle'] = '助教信息';
 			$this->load->view('userHeader',$data);
 			$this->load->view('user_ta_info');
@@ -225,11 +225,11 @@ class User extends CI_Controller {
 		foreach ($taIdList as $taId) {
 			$ta = $this->Ta_model->searchById($taId);
 			$taList[$taId] = $ta;
-			if($ta->unitPrice > $max){
-				$max = $ta->unitPrice;
+			if($ta['unitPrice'] > $max){
+				$max = $ta['unitPrice'];
 			}
-			if($ta->unitPrice < $min){
-				$min = $ta->unitPrice;
+			if($ta['unitPrice'] < $min){
+				$min = $ta['unitPrice'];
 			}
 		}
 		if (!session_id()) session_start();
@@ -261,10 +261,10 @@ class User extends CI_Controller {
 		$selectedTa = $_SESSION['taList'];
 		// if(is_array($selectedTa)){
 			foreach ($selectedTa as $ta) {
-				echo '推送的人的名字：'.$ta->name."\n";
-			$this->Weixin_model->sendMessageToTa($order, $ta->openid, '有新的订单提醒');
+				echo '推送的人的名字：'.$ta['name']."\n";
+			$this->Weixin_model->sendMessageToTa($order, $ta['openid'], '有新的订单提醒');
 
-			$data['taId'] = $ta->openid;
+			$data['taId'] = $ta['openid'];
 			$data['orderNum'] = $order['orderNum'];
 			$data['createTime'] = date('Y-m-d h:i:s');
 			$this->Order_model->selectTa($data);
@@ -289,7 +289,7 @@ class User extends CI_Controller {
 		}else{
 			$data['pageTitle'] = 'Unpaid Orders';
 			$this->load->model('Order_model');
-			$data['orderList'] = $this->Order_model->searchBy2('userId', $user->openid, 'hasPaid', 0);
+			$data['orderList'] = $this->Order_model->searchBy2('userId', $user['openid'], 'hasPaid', 0);
 			$this->load->view('userHeader', $data);
 			$this->load->view('orderList');
 			$this->load->view('userFooter');
@@ -303,7 +303,7 @@ class User extends CI_Controller {
 		}else{
 			$data['pageTitle'] = 'Untakenhed Orders';
 			$this->load->model('Order_model');
-			$data['orderList'] = $this->Order_model->searchBy3('userId', $user->openid, 'hasPaid', 1, 'hasTaken', 0);
+			$data['orderList'] = $this->Order_model->searchBy3('userId', $user['openid'], 'hasPaid', 1, 'hasTaken', 0);
 			$this->load->view('userHeader', $data);
 			$this->load->view('orderList');
 			$this->load->view('userFooter');
@@ -317,7 +317,7 @@ class User extends CI_Controller {
 		}else{
 			$data['pageTitle'] = 'Unfinished Orders';
 			$this->load->model('Order_model');
-			$data['orderList'] = $this->Order_model->searchBy3('userId', $user->openid, 'hasTaken', 1, 'hasFinished', 0);
+			$data['orderList'] = $this->Order_model->searchBy3('userId', $user['openid'], 'hasTaken', 1, 'hasFinished', 0);
 			$this->load->view('userHeader', $data);
 			$this->load->view('orderList');
 			$this->load->view('userFooter');
@@ -331,7 +331,7 @@ class User extends CI_Controller {
 		}else{
 			$data['pageTitle'] = 'Finished Orders';
 			$this->load->model('Order_model');
-			$data['orderList'] = $this->Order_model->searchBy3('userId', $user->openid, 'hasPaid', 1, 'hasFinished', 1);
+			$data['orderList'] = $this->Order_model->searchBy3('userId', $user['openid'], 'hasPaid', 1, 'hasFinished', 1);
 			$this->load->view('userHeader', $data);
 			$this->load->view('orderList');
 			$this->load->view('userFooter');

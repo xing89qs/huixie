@@ -66,13 +66,13 @@
 			<tbody>
 			<?php if(!empty($taList))foreach ($taList as $ta):?>
 				<tr>
-					<td> <?php echo $ta->openid;?> </td>
-					<td> <?php echo $ta->name;?> </td>
-					<td> <?php echo $ta->email;?> </td>
-					<td> <?php echo $ta->skills;?> </td>
-					<td> <?php echo $ta->star;?> </td>
-					<td> <?php echo $ta->unitPrice;?> </td>
-					<td> <?php echo $ta->createTime;?> </td>
+					<td> <?php echo $ta['openid'];?> </td>
+					<td> <?php echo $ta['name'];?> </td>
+					<td> <?php echo $ta['email'];?> </td>
+					<td> <?php echo $ta['skills'];?> </td>
+					<td> <?php echo $ta['star'];?> </td>
+					<td> <?php echo $ta['unitPrice'];?> </td>
+					<td> <?php echo $ta['createTime'];?> </td>
 				</tr>
 			<?php endforeach;?>
 			</tbody>

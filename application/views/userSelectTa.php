@@ -12,9 +12,9 @@
 		<img src="http://dailyquestion.sinaapp.com/upload/head/default.jpg" alt="..." class="img-circle" style="width:120px;height:120px">
   		
   		<br>
-  		<label>姓名：<?php echo $ta->name;?></label>
-  		<label>评级：<?php echo $ta->star;?></label>
-  		<label>单价：<?php echo $ta->unitPrice;?></label>
+  		<label>姓名：<?php echo $ta['name'];?></label>
+  		<label>评级：<?php echo $ta['star'];?></label>
+  		<label>单价：<?php echo $ta['unitPrice'];?></label>
   		
 	</div>
 <?php endforeach;?>

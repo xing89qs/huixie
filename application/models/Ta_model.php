@@ -8,12 +8,22 @@ class Ta_model extends CI_Model{
 		$this->db->where('openid',$id);
 		$this->db->select('*');
 		$query=$this->db->get('ta');
-		return $query->result()[0];
+		if($this->db->affected_rows()){
+			$result = $query->result();
+			return json_decode(json_encode($result[0]),true);
+		}else{
+			return array();
+		}
 	}
 	function getAll(){
 		$this->db->select('*');
 		$query=$this->db->get('ta');
-		return $query->result();
+		if($this->db->affected_rows()){
+			$result = $query->result();
+			return json_decode(json_encode($result),true);
+		}else{
+			return array();
+		}
 	}
 	function add($data){
 		$this->db->query($this->db->insert_string('ta',$data));					
@@ -24,15 +34,21 @@ class Ta_model extends CI_Model{
 		$this->db->select('*');
 		$query=$this->db->get('ta');
 		if($this->db->affected_rows()){
-			$sae =	$query->result();
-			return $sae[0];
+			$result = $query->result();
+			return json_decode(json_encode($result),true);
+		}else{
+			return array();
 		}
-		return $this->db->affected_rows();
 	}
 	function searchBySkills($skills){
 		$sql="select * from ta where skills='$skills' order by star desc limit 10";
 		$query=$this->db->query($sql);
-		return $query->result();
+		if($this->db->affected_rows()){
+			$result = $query->result();
+			return json_decode(json_encode($result),true);
+		}else{
+			return array();
+		}
 	}
 
 	function delete(){

@@ -33,7 +33,7 @@ class Admin extends CI_Controller {
 		$name = $_POST['name'];
 		$password = $_POST['password'];
 		$admin = $this->Admin_model->searchByName($name);
-		if(isset($admin) and $admin->password == $password){
+		if(isset($admin) and $admin['password'] == $password){
 			if (!session_id()) session_start();
 			$_SESSION['admin'] = $admin;	
 			redirect('admin/adminList');
@@ -72,13 +72,13 @@ class Admin extends CI_Controller {
 		if(isset($_POST['orignal']) and isset($_POST['password'])){
 			$orignal = $_POST['orignal'];
 			$password = $_POST['password'];
-			if($admin->password == $orignal){
+			if($admin['password'] == $orignal){
 				$this->load->model('Admin_model');
-				$admin->password = $password;
-				$this->Admin_model->modify($admin->name, $admin);
+				$admin['password'] = $password;
+				$this->Admin_model->modify($admin['name'], $admin);
 				header("refresh:3;url=adminList");
 				print('修改成功...<br> 3秒后自动跳转。');
-			exit(0);
+				exit(0);
 			}else{
 				header("refresh:3;url=loginPage");
 				print('原始密码错误...<br> 3秒后自动跳转。');

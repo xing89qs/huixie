@@ -14,7 +14,7 @@
 	<div>
 		<label>选择的TA姓名</label>
 		<?php if(!empty($taList))foreach ($taList as $ta):?>
-  		<label>姓名：<?php echo $ta->name;?></label>
+  		<label>姓名：<?php echo $ta['name'];?></label>
   		<?php endforeach;?>
 	</div>
 

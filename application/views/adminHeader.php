@@ -115,7 +115,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
       <ul class="nav navbar-nav navbar-right">
       <?php if(isset($admin)): ?>
-        <li class="active"><a><?php echo $admin->name;?>，欢迎您登陆</a></li>
+        <li class="active"><a><?php echo $admin['name'];?>，欢迎您登陆</a></li>
       <?php else: ?>
         <li class="active"><a href="<?php echo site_url("admin/loginPage");?>">登陆</a></li>
       <?php endif ?>

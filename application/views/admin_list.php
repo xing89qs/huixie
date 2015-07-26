@@ -61,8 +61,8 @@
 			<tbody>
 			<?php if(!empty($adminList))foreach ($adminList as $admin):?>
 				<tr>
-					<td> <?php echo $admin->name;?> </td>
-					<td> <?php echo $admin->password;?> </td>
+					<td> <?php echo $admin['name'];?> </td>
+					<td> <?php echo $admin['password'];?> </td>
 				</tr>
 			<?php endforeach;?>
 			</tbody>

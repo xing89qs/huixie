@@ -64,11 +64,11 @@
 			<tbody>
 			<?php if(!empty($userList))foreach ($userList as $user):?>
 				<tr>
-					<td> <?php echo $user->id;?> </td>
-					<td> <?php echo $user->name;?> </td>
-					<td> <?php echo $user->university;?> </td>
-					<td> <?php echo $user->email;?> </td>
-					<td> <?php echo $user->createTime;?> </td>
+					<td> <?php echo $user['id'];?> </td>
+					<td> <?php echo $user['name'];?> </td>
+					<td> <?php echo $user['university'];?> </td>
+					<td> <?php echo $user['email'];?> </td>
+					<td> <?php echo $user['createTime'];?> </td>
 				</tr>
 			<?php endforeach;?>
 			</tbody>

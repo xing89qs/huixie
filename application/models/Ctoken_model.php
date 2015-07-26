@@ -7,12 +7,22 @@ class Ctoken_model extends CI_Model{
 	function searchByAppid($id){
 		$sql="select * from ctoken where appid='$id' order by createTime desc limit 3";
 		$query=$this->db->query($sql);
-		return $query->result();
+		if($this->db->affected_rows()){
+			$result = $query->result();
+			return json_decode(json_encode($result),true);
+		}else{
+			return array();
+		}
 	}
 	function getAll(){
 		$this->db->select('*');
 		$query=$this->db->get('ctoken');
-		return $query->result();
+		if($this->db->affected_rows()){
+			$result = $query->result();
+			return json_decode(json_encode($result),true);
+		}else{
+			return array();
+		}
 	}
 	function add($data){
 		$this->db->query($this->db->insert_string('ctoken',$data));					
@@ -24,14 +34,14 @@ class Ctoken_model extends CI_Model{
 		$this->load->Model('Http_model');
 		if($force == false){
 			$result = $this->searchByAppid($appid);
-			if(isset($result[0])){
+			if($result){
 				$ctoken = $result[0];
 				$now = time();
-				if(($now - 60 - $ctoken->createTime) > $ctoken->expire){
+				if(($now - 60 - $ctoken['createTime']) > $ctoken['expire']){
 					//超时
 					return $this->getAccessToken(true);
 				}else{
-					return $ctoken->token;
+					return $ctoken['token'];
 				}
 			}else{
 				return $this->getAccessToken(true);

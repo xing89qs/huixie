@@ -8,16 +8,24 @@ class Order_model extends CI_Model{
 		$this->db->where($key, $value);
 		$this->db->select('*');
 		$query=$this->db->get('order');
-		$sae = $query->result();
-		return $sae;
+		if($this->db->affected_rows()){
+			$result = $query->result();
+			return json_decode(json_encode($result),true);
+		}else{
+			return array();
+		}
 	}
 	function searchBy2($key1, $value1, $key2, $value2){
 		$this->db->where($key1, $value1);
 		$this->db->where($key2, $value2);
 		$this->db->select('*');
 		$query=$this->db->get('order');
-		$sae = $query->result();
-		return $sae;
+		if($this->db->affected_rows()){
+			$result = $query->result();
+			return json_decode(json_encode($result),true);
+		}else{
+			return array();
+		}
 	}
 	function searchBy3($key1, $value1, $key2, $value2, $key3, $value3){
 		$this->db->where($key1, $value1);
@@ -25,18 +33,32 @@ class Order_model extends CI_Model{
 		$this->db->where($key3, $value3);
 		$this->db->select('*');
 		$query=$this->db->get('order');
-		$sae = $query->result();
-		return $sae;
+		if($this->db->affected_rows()){
+			$result = $query->result();
+			return json_decode(json_encode($result),true);
+		}else{
+			return array();
+		}
 	}
 	function getAll(){
 		$this->db->select('*');
 		$query=$this->db->get('order');
-		return $query->result();
+		if($this->db->affected_rows()){
+			$result = $query->result();
+			return json_decode(json_encode($result),true);
+		}else{
+			return array();
+		}
 	}
 	function add($data){
 		$this->db->query($this->db->insert_string('order',$data));
 		$query=$this->db->query("select @@identity as id");
-		return $query->result();
+		if($this->db->affected_rows()){
+			$result = $query->result();
+			return json_decode(json_encode($result),true);
+		}else{
+			return array();
+		}
 	}
 	function delete(){
 		
@@ -59,7 +81,12 @@ class Order_model extends CI_Model{
 		$this->db->where('taId', $taId);
 		$this->db->select('*');
 		$query=$this->db->get('selectedTa');
-		return $query->result()[0];
+		if($this->db->affected_rows()){
+			$result = $query->result();
+			return json_decode(json_encode($result[0]),true);
+		}else{
+			return array();
+		}
 	}
 }
 ?>

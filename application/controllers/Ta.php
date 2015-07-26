@@ -42,12 +42,12 @@ class Ta extends CI_Controller {
 			redirect('ta/taList');
 		}
 	}
-
+//==
 	function takeOrderPage(){
 		$this->checkLogin();
 		$this->load->model('Order_model');
 		$select = $this->Order_model->searchSelectTa();
-		$order = $this->Order_model->selectBy1('orderNum', $select->orderNum);
+		$order = $this->Order_model->selectBy1('orderNum', $select['orderNum']);
 
 			$data['pageTitle'] = '接单';
 			$data['order'] = $order;

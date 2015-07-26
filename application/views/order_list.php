@@ -78,25 +78,25 @@
 			<tbody>
 			<?php if(!empty($orderList))foreach ($orderList as $order):?>
 				<tr>
-					<td> <?php echo $order->id;?> </td>
-					<td> <?php echo $order->orderNum;?> </td>
-					<td> <?php echo $order->major;?> </td>
-					<td> <?php echo $order->courseName;?> </td>
-					<td> <?php echo $order->email;?> </td>
-					<td> <?php echo $order->pageNum;?> </td>
-					<td> <?php echo $order->refDoc;?> </td>
-					<td> <?php echo $order->endTime;?> </td>
-					<td> <?php echo $order->requirement;?> </td>
-					<td> <?php echo $order->userId;?> </td>
-					<td> <?php echo $order->taId;?> </td>
-					<td> <?php echo $order->price;?> </td>
-					<td> <?php echo $order->hasPaid;?> </td>
-					<td> <?php echo $order->hasTaken;?> </td>
-					<td> <?php echo $order->hasFinished;?> </td>
-					<td> <?php echo $order->createTime;?> </td>
-					<td> <?php echo $order->paidTime;?> </td>
-					<td> <?php echo $order->takenTime;?> </td>
-					<td> <?php echo $order->finishedTime;?> </td>
+					<td> <?php echo $order['id'];?> </td>
+					<td> <?php echo $order['orderNum'];?> </td>
+					<td> <?php echo $order['major'];?> </td>
+					<td> <?php echo $order['courseName'];?> </td>
+					<td> <?php echo $order['email'];?> </td>
+					<td> <?php echo $order['pageNum'];?> </td>
+					<td> <?php echo $order['refDoc'];?> </td>
+					<td> <?php echo $order['endTime'];?> </td>
+					<td> <?php echo $order['requirement'];?> </td>
+					<td> <?php echo $order['userId'];?> </td>
+					<td> <?php echo $order['taId'];?> </td>
+					<td> <?php echo $order['price'];?> </td>
+					<td> <?php echo $order['hasPaid'];?> </td>
+					<td> <?php echo $order['hasTaken'];?> </td>
+					<td> <?php echo $order['hasFinished'];?> </td>
+					<td> <?php echo $order['createTime'];?> </td>
+					<td> <?php echo $order['paidTime'];?> </td>
+					<td> <?php echo $order['takenTime'];?> </td>
+					<td> <?php echo $order['finishedTime'];?> </td>
 				</tr>
 			<?php endforeach;?>
 			</tbody>

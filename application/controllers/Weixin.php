@@ -14,11 +14,23 @@ class Weixin extends CI_Controller {
 		$this->load->model('Weixin_model');
 		// $this->Weixin_model->getAllFollower();
 		// $this->Weixin_model->getFollowerInfo('oJWDev7W6DN_6gKuLumLPoOUeky4');
-		$this->Weixin_model->sendTemplateMessage();
+
+		$this->load->model('Admin_model');
+		$admin = $this->Admin_model->searchByName('admin2');
+
+		// $result =  json_decode(json_encode($admin),true);
+		$result = array('1'=>1, '2'=>3);
+		if($result){
+			echo 'true';
+		}else{
+			echo 'false';
+		}
+		var_dump($result);
+		//$this->Weixin_model->sendTemplateMessage();
 
 		//url encode
 		// 授权接口需要转码
-		// $url = 'http://nomoredue.com/huixie/index.php/user/orderPage';
+		// $url = 'http://huixie.me/huixie/index.php/user/orderPage';
 		// echo urlencode($url);
 		
 		$this->log('index end ==================================================>');

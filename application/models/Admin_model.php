@@ -7,7 +7,12 @@ class Admin_model extends CI_Model{
 	function getAll(){
 		$this->db->select('*');
 		$query=$this->db->get('admin');
-		return $query->result();
+		if($this->db->affected_rows()){
+			$result = $query->result();
+			return json_decode(json_encode($result),true);
+		}else{
+			return array();
+		}
 	}
 	function add($data){
 		$this->db->query($this->db->insert_string('admin',$data));					
@@ -19,7 +24,7 @@ class Admin_model extends CI_Model{
 		$query=$this->db->get('admin');
 		if($this->db->affected_rows()){
 			$sae =	$query->result();
-			return $sae[0];
+			return json_decode(json_encode($sae[0]),true);
 		}
 		return $this->db->affected_rows();
 	}
